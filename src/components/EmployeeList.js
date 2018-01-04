@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ListView } from 'react-native';
+import { ListView, BackHandler } from 'react-native';
 import { employeesFetch } from '../actions';
 import ListItem from './ListItem';
 
@@ -12,8 +12,16 @@ class EmployeeList extends Component {
     this.createDataSource(this.props);
   }
 
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => this.backButton());
+  }
+
   componentWillReceiveProps(nextProps) {
     this.createDataSource(nextProps);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', () => this.backButton());
   }
 
   createDataSource({ employees }) {
@@ -22,6 +30,10 @@ class EmployeeList extends Component {
     });
 
     this.dataSource = ds.cloneWithRows(employees);
+  }
+
+  backButton() {
+    BackHandler.exitApp();
   }
 
   renderRow(employee) {

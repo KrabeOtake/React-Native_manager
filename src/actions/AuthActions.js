@@ -25,16 +25,17 @@ export const passwordChanged = (text) => {
 export const loginUser = ({ email, password }) => {
   return (dispatch) => {
     dispatch({ type: LOGIN_USER });
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(user => loginUserSuccess(dispatch, user))
+        .catch((error) => {
+          console.log(error);
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(user => loginUserSuccess(dispatch, user))
-      .catch((error) => {
-        console.log(error);
-
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-          .then(user => loginUserSuccess(dispatch, user))
-          .catch(() => loginUserFail(dispatch));
-      });
+          firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(user => loginUserSuccess(dispatch, user))
+            .catch(() => loginUserFail(dispatch));
+        })
+      );
   };
 };
 
