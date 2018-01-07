@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import {
   EMAIL_CHANGED,
@@ -23,7 +24,7 @@ export const passwordChanged = (text) => {
 };
 
 export const loginUser = ({ email, password }) => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: LOGIN_USER });
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .then(() => firebase.auth().signInWithEmailAndPassword(email, password)

@@ -1,10 +1,27 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 
 class LoginForm extends Component {
+  componentWillMount() {
+    console.log('willMount');
+    if (this.props.user) {
+      Actions.main();
+    }
+  }
+
+  componentDidMount() {
+      console.log('didMount');
+  }
+
+componentWillReceiveProps(nextProps) {
+  console.log('receiveProps');
+  console.log('State: ', this.props);
+}
+
   onEmailChange(text) {
     this.props.emailChanged(text);
   }
@@ -74,9 +91,9 @@ const styles = {
 };
 
 const mapStateToProps = ({ auth }) => {
-  const { email, password, error, loading } = auth;
+  const { email, password, error, loading, user } = auth;
 
-  return { email, password, error, loading };
+  return { email, password, error, loading, user };
 };
 
 export default connect(mapStateToProps, {

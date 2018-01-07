@@ -1,3 +1,4 @@
+import { REHYDRATE } from 'redux-persist/constants';
 import {
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
@@ -16,6 +17,9 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case REHYDRATE:{
+      console.log('reducer: ', action.payload);
+      return action.payload || [];}
     case EMAIL_CHANGED:
       return { ...state, email: action.payload };
     case PASSWORD_CHANGED:

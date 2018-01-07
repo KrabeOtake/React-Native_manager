@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { persistStore, autoRehydrate } from 'redux-persist';
+import { AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import firebase from 'firebase';
 import ReduxThunk from 'redux-thunk';
+import store from './store';
 import reducers from './reducers';
 import Router from './Router';
 
@@ -18,18 +21,26 @@ class App extends Component {
 
     };
 
-    if (firebase.apps.length === 0){
+    if (firebase.apps.length === 0) {
       firebase.initializeApp(config);
     }
   }
 
   render() {
-    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
+/*
+    const store = createStore(reducers, compose(
+    autoRehydrate(),
+    applyMiddleware(ReduxThunk, loggerMiddleware)
+
+));
+    persistStore(store, { storage: AsyncStorage });
+*/
     return (
       <Provider store={store}>
         <Router />
       </Provider>
+
     );
   }
 }
